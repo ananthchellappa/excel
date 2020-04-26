@@ -31,3 +31,8 @@ How do I use someone elses Personal Macro Workbook (PMWB)?
 Having found out where Excel stores your PMWB, exit Excel and then, go to that location and delete
 the dummy PWMB and now move the one you want to use to that location. Make sure the PMWB is
 from someone you trust. The source code should be available.
+
+Having said that, how should you use the PMWB featured here if you don't trust it?
+
+Ans : Use the attached source code - you can put it all into a single module within your dummy PMWB
+if you wish.
