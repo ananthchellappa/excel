@@ -1,5 +1,7 @@
 Option Explicit
 
+Option Compare Text
+
 Private Sub Worksheet_SelectionChange(ByVal Target As Range)
     If Target.Cells.CountLarge > 1 Then Exit Sub
     Application.ScreenUpdating = False
@@ -630,9 +632,6 @@ Sub thickEdge()
     Selection.Borders(xlInsideHorizontal).LineStyle = xlNone
 End Sub
 
-Option Explicit
-
-Option Compare Text
 
 Sub Go_Home()
     If ActiveWorkbook.Worksheets(1).Name = "home" Then
