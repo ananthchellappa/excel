@@ -1,0 +1,687 @@
+Private Sub Worksheet_SelectionChange(ByVal Target As Range)
+    If Target.Cells.CountLarge > 1 Then Exit Sub
+    Application.ScreenUpdating = False
+    ' Clear the color of all the cells
+    Cells.Interior.ColorIndex = 0
+    With Target
+        ' Highlight the entire row and column that contain the active cell
+        .EntireRow.Interior.ColorIndex = 4
+        .EntireColumn.Interior.ColorIndex = 4
+    End With
+    Application.ScreenUpdating = True
+End Sub
+
+Sub InsertCopyRow2()
+    Dim TableName As String
+    Dim TableHeader As String
+    
+    ActiveCell.Offset(1, 0).EntireRow.Insert
+    ActiveCell.EntireRow.Copy ActiveCell.Offset(1, 0).EntireRow
+    ' Selection.End(xlToLeft).Select  ' this one is treacherous - if you're already where you want to be, you're hosed and if too far to the right, you don't make much progress!
+    Cells(ActiveCell.Row, ActiveCell.ListObject.Range.Column).Select
+    TableName = ActiveCell.ListObject.Name
+    TableHeader = ActiveCell.ListObject.HeaderRowRange.Cells(1, ActiveCell.Column - ActiveCell.ListObject.Range.Column + 1).Value
+    If "#" = TableHeader Then
+        ActiveCell.Value = 1 + ActiveCell.Value
+    End If
+    
+End Sub
+
+
+Sub find_next()
+    Cells.Find(What:=ActiveCell.Value2, After:=ActiveCell, LookIn:=xlFormulas, LookAt _
+        :=xlWhole, SearchOrder:=xlByRows, SearchDirection:=xlNext, MatchCase:= _
+        False, SearchFormat:=False).Activate
+End Sub
+
+Sub Copy2Top()
+
+    Dim nRow As Long
+    nRow = ActiveCell.Row
+    Selection.End(xlUp).Select
+    ' check if you're at header
+    If ActiveCell.Row = ActiveCell.ListObject.HeaderRowRange.Cells(1).Row Then
+        ActiveCell.Offset(1).Select
+    End If
+    
+    ActiveCell.EntireRow.Insert
+    Rows(nRow + 1).EntireRow.Copy Rows(ActiveCell.Row)
+
+End Sub
+
+
+Sub MikeRickson_Swap()
+    Dim tempRRay As Variant
+    With Selection
+           With Range(.Areas(1), .Areas(.Areas.Count)).EntireRow
+                tempRRay = .Rows(1).Value
+                .Rows(1).Value = .Rows(.Rows.Count).Value
+                .Rows(.Rows.Count).Value = tempRRay
+           End With
+    End With
+End Sub
+
+Sub Autofilter_by_selection()
+    If ActiveSheet.FilterMode Then
+        ActiveSheet.ShowAllData
+    Else
+        ActiveSheet.ListObjects(ActiveCell.ListObject.Name).Range.AutoFilter Field:=(1 + ActiveCell.Column - ActiveSheet.ListObjects(ActiveCell.ListObject.Name).Range.Column), Criteria1:=ActiveCell.Value
+    End If
+End Sub
+
+
+Private Sub Worksheet_SelectionChange(ByVal Target As Range)
+    If Target.Cells.CountLarge > 1 Then Exit Sub
+    Application.ScreenUpdating = False
+    ' Clear the color of all the cells
+    Cells.Interior.ColorIndex = 0
+    With Target
+        ' Highlight the entire row and column that contain the active cell
+        .EntireRow.Interior.ColorIndex = 4
+        .EntireColumn.Interior.ColorIndex = 4
+    End With
+    Application.ScreenUpdating = True
+End Sub
+
+
+
+Sub sort_col_desc()
+    Dim TableName As String
+    Dim TableHeader As String
+    
+    TableName = ActiveCell.ListObject.Name
+    TableHeader = ActiveCell.ListObject.HeaderRowRange.Cells(1, ActiveCell.Column - ActiveCell.ListObject.Range.Column + 1).Value
+    
+    With ActiveCell.ListObject.Sort
+        .SortFields.Clear
+        .SortFields.Add2 Key:=Range(TableName & "[[#All],['" & TableHeader & "]]"), SortOn:=xlSortOnValues, _
+            Order:=xlDescending, DataOption:=xlSortNormal
+        .Header = xlYes
+        .MatchCase = False
+        .Orientation = xlTopToBottom
+        .Apply
+                
+    End With
+End Sub
+Sub sort_col_asc()
+    Dim TableName As String
+    Dim TableHeader As String
+    
+    TableName = ActiveCell.ListObject.Name
+    TableHeader = ActiveCell.ListObject.HeaderRowRange.Cells(1, ActiveCell.Column - ActiveCell.ListObject.Range.Column + 1).Value
+    
+    With ActiveCell.ListObject.Sort
+        .SortFields.Clear
+        .SortFields.Add2 Key:=Range(TableName & "[[#All],['" & TableHeader & "]]"), SortOn:=xlSortOnValues, _
+            Order:=xlAscending, DataOption:=xlSortNormal
+        .Header = xlYes
+        .MatchCase = False
+        .Orientation = xlTopToBottom
+        .Apply
+                
+    End With
+End Sub
+
+
+'           from Jordan Goldmeier
+
+Public Sub FilterNextItem()
+    
+On Error GoTo ErrorHandler
+
+    '/// Test to see if the selector is currently in range of the table
+    Dim TableIntersectionTest   As Range
+    Set TableIntersectionTest = Intersect(ActiveSheet.ListObjects(ActiveCell.ListObject.Name).Range, Selection)
+                                                                                'The Intersect function test if the selector |
+                                                                                'intersects with the table range. If it
+                                                                                'evaluates to nothing, it's not.
+    If TableIntersectionTest Is Nothing Then
+        MsgBox "Please place the cursor within the table range.", vbCritical
+        Exit Sub
+    End If
+    '//////////
+
+    ' This code can be broken down into the following steps.
+    ' 1 - Pull in the entire second column
+    ' 2 - Sort the column so we can define what Next means
+    ' 3 - Find the location of the currently selected item within the column headers
+    ' 4 - Iterate from that location until we find a different item, which would be the
+    '     "next" item in the sorted list.
+    ' 5 - Clear the current filter and set a new filter to be that next item in the list
+    
+    
+    Dim ColumnArray As Variant          'Stores the array of all column values, even if they're hidden
+    Dim CurrentFilter As Filter         'Stores the current filter object
+    Dim Criteria As Variant             'Stores the current Criteria
+    Dim CurrentColumnIndex As Integer   'Stores the column location of the item to be filtered
+    
+    
+    ' 1 - pull in the entire second column
+    ' In Excel, you can store entire ranges of values, regardles of their size by assigning
+    ' them to a variant during run time. That's what we do below in ColumnArray = ....
+    ' We use transpose because of the way the data is stored upon assignment.
+    '
+    ' Without the application transpose, the variant created is a columnar. That means it
+    ' has two dimensions. So we would access each data items as Array(n, 1), since it has
+    ' n many rows as with one column. When we call the matrix equation to transpose, this
+    ' flattens the array so that it's just Array(n)
+    ' CurrentColumnIndex = ActiveSheet.ListObjects(ActiveCell.ListObject.Name).ListColumns(Selection.End(xlUp).Value).Index
+    CurrentColumnIndex = 1 + ActiveCell.Column - ActiveSheet.ListObjects(ActiveCell.ListObject.Name).Range.Column
+    ColumnArray = Application.Transpose(ActiveSheet.ListObjects(ActiveCell.ListObject.Name).ListColumns(CurrentColumnIndex).DataBodyRange)
+    
+    ' 2 - Sort the Column
+    Call QuickSort(ColumnArray, 1, UBound(ColumnArray))
+    
+    ' 3 - Find the location of the currently selected item within the column headers
+    Set CurrentFilter = ActiveSheet.AutoFilter.Filters(CurrentColumnIndex)
+
+    If CurrentFilter.On Then
+        Criteria = CurrentFilter.Criteria1
+    Else
+        MsgBox "This is not a filtered column. Please place your cursor into a filtered column.", vbCritical
+        Exit Sub
+    End If
+       
+    ' 4, 5 - iterate until we find the item and then iterate until we find the next item
+    Dim i As Long                    'iterator  Integer --> Long, AC 3/13/19
+    Dim FilterToNextItem As Boolean     'This effectively tests if we've found in the list where the current filtered item is
+    Dim ItemToFilter As String          'This is currently filtered item
+    Dim NewItemToFilter As String       'This is the next item to filter
+    
+    ItemToFilter = Replace(Criteria, "=", "")   'When we pull the criteria, it will be like "=A", so we'll remove
+                                                'the equals
+        
+    For i = LBound(ColumnArray) To UBound(ColumnArray) + 1 'We add 1 so that the iteration will go to n + 1 items - when it
+                                                           'hits the n+1 value, we know we need to start it over from the beginning
+        If FilterToNextItem Then
+            ' The for loop has reached the end of the list, so we'll direct it
+            ' to start over.
+            If i > UBound(ColumnArray) Then
+                ' Set the new item to filter to be the beginning
+                ' of the list
+                NewItemToFilter = ColumnArray(LBound(ColumnArray))
+                Exit For
+            End If
+            ' If the previous condition isn't satisfied, it means we've found the
+            ' next item in the list. So we'll filter to that instead.
+            If Not ColumnArray(i) = ItemToFilter Then
+                NewItemToFilter = ColumnArray(i)
+                Exit For
+            End If
+        End If
+        
+        'This flags that we'll be filtering to the next item in the list
+        If ColumnArray(i) = ItemToFilter Then
+            FilterToNextItem = True
+        End If
+    Next
+    
+    
+    'Assign the array
+    Dim ws As Worksheet
+
+    
+    Selection.AutoFilter Field:=CurrentColumnIndex, _
+        Criteria1:=NewItemToFilter, Operator:=xlFilterValues
+
+Exit Sub
+ErrorHandler:
+
+MsgBox "Please ensure you are filtered to one item only.", vbCritical
+
+End Sub
+
+Public Sub FilterToPreviousItem()
+
+    On Error GoTo ErrorHandler
+
+    'This code is virtualy the same to FilterToNextItem. Except for a few indicated changes below,
+    'please see that procedure to understand how it works.
+
+    '/// Test to see if the selector is currently in range of the table
+    Dim TableIntersectionTest   As Range
+    Set TableIntersectionTest = Intersect(ActiveSheet.ListObjects(ActiveCell.ListObject.Name).Range, Selection)   'The Intersect function test if the selector |
+                                                                                'intersects with the table range. If it
+                                                                                'evaluates to nothing, it's not.
+    
+    If TableIntersectionTest Is Nothing Then
+        MsgBox "Please place the cursor within the table range.", vbCritical
+        Exit Sub
+    End If
+    '//////////
+    
+    Dim ColumnArray As Variant
+    Dim CurrentFilter As Filter
+    Dim Criteria As Variant
+    Dim CurrentColumnIndex As Integer
+    
+    'CurrentColumnIndex = ActiveSheet.ListObjects(ActiveCell.ListObject.Name).ListColumns(Selection.End(xlUp).Value).Index
+    CurrentColumnIndex = 1 + ActiveCell.Column - ActiveSheet.ListObjects(ActiveCell.ListObject.Name).Range.Column
+    ColumnArray = Application.Transpose(ActiveSheet.ListObjects(ActiveCell.ListObject.Name).ListColumns(CurrentColumnIndex).DataBodyRange)
+    Call QuickSort(ColumnArray, 1, UBound(ColumnArray))
+    
+    Set CurrentFilter = ActiveSheet.AutoFilter.Filters(CurrentColumnIndex)
+
+    If CurrentFilter.On Then
+        Criteria = CurrentFilter.Criteria1
+    Else
+        MsgBox "This is not a filtered column. Please place your cursor into a filtered column.", vbCritical
+        Exit Sub
+    End If
+        
+    Dim i As Long
+    Dim FilterToNextItem As Boolean
+    Dim ItemToFilter As String
+    Dim NewItemToFilter As String
+    ItemToFilter = Replace(Criteria, "=", "")
+    
+    
+    For i = UBound(ColumnArray) To LBound(ColumnArray) - 1 Step -1
+        If i < LBound(ColumnArray) Then
+            NewItemToFilter = ColumnArray(UBound(ColumnArray))
+            Exit For
+        End If
+        
+        If FilterToNextItem Then
+            If Not ColumnArray(i) = ItemToFilter Then
+                NewItemToFilter = ColumnArray(i)
+                Exit For
+            End If
+        End If
+        If ColumnArray(i) = ItemToFilter Then
+            FilterToNextItem = True
+        End If
+    Next
+    
+    Selection.AutoFilter Field:=CurrentColumnIndex, _
+        Criteria1:=NewItemToFilter, Operator:=xlFilterValues
+
+Exit Sub
+ErrorHandler:
+
+MsgBox "Please ensure you are filtered to one item only.", vbCritical
+
+End Sub
+
+
+Public Sub ExcludeFromFilter()
+
+    'On Error GoTo ErrorHandler
+    
+    '/// Test to see if the selector is currently in range of the table
+    Dim TableIntersectionTest   As Range
+    Set TableIntersectionTest = Intersect(ActiveSheet.ListObjects(ActiveCell.ListObject.Name).Range, Selection)
+                                                                    'The Intersect function test if the selector |
+                                                                                'intersects with the table range. If it
+                                                                                'evaluates to nothing, it's not.
+    
+    If TableIntersectionTest Is Nothing Then
+        MsgBox "Please place the cursor within the table range.", vbCritical
+        Exit Sub
+    End If
+    '//////////
+    
+
+    Dim CurrentFilter As Filter         'This is the iterator that will allow us to iterate through me.autofilter.filters
+    
+    Dim Criteria As Variant             'This is a local variable reflecting the .Criteria1 of the CurrentFilter
+    
+    Dim Criteria2 As Variant            'This is a local variable reflecting the .Criteria2 of the CurrentFilter.           |
+                                        'See notes below. This will become important if there are only two filtered items.  |
+                            
+    'Dim IndexToRemove As Integer    '
+    Dim ExclusionItem As String         'This is the string of the item we want removed
+    
+    Dim CurrentColumnIndex As Integer   'This will help us track which column in the table we want to filter.   |
+                                        'The Index reflects its location among the column headers.              |
+    
+    Dim OnlyTwoItems As Boolean         'This will test if we only have two items. Excel treats these filters differently.
+    
+    Dim NewCriteria As Variant          'This is a variant datatype that will store our new filter set. Could be a single |
+                                        'value or an Array. See notes below.
+    
+    Dim TableHasFilters As Boolean      'This will test if the table has anything filtered. If not, this macro won't work.
+
+    ExclusionItem = Selection.Value     'Here we assigne the current selection value to the ExcelusionItem variable
+    
+    
+    '///    In this next bit of code, we need to find which column has been filtered. Even if           |
+    '       there are dropdowns showing in the column headers, nothing may be filtered. To test         |
+    '       if a filter has been deployed, we must itereate through all columns filters.                |
+    '       In each case, we test if CurrentFilter.On, which evaluates to TRUE or FALSE. If it's        |
+    '       true, we know we've hit the column we're interested in.                                     |
+    
+    'CurrentColumnIndex = ActiveSheet.ListObjects(ActiveCell.ListObject.Name).ListColumns(Selection.End(xlUp).Value).Index
+    CurrentColumnIndex = 1 + ActiveCell.Column - ActiveSheet.ListObjects(ActiveCell.ListObject.Name).Range.Column
+    
+    Set CurrentFilter = ActiveSheet.AutoFilter.Filters(CurrentColumnIndex)
+    If CurrentFilter.On Then
+        TableHasFilters = True
+        If CurrentFilter.Count > 2 Then
+            Criteria = CurrentFilter.Criteria1
+        Else
+            OnlyTwoItems = True
+            Criteria = CurrentFilter.Criteria1
+            Criteria2 = CurrentFilter.Criteria2
+        End If
+    Else
+        Criteria = Application.Transpose(ActiveSheet.ListObjects(ActiveCell.ListObject.Name).ListColumns(CurrentColumnIndex).DataBodyRange.Value)
+        Call QuickSort(Criteria, 1, UBound(Criteria))
+        Call RemoveDuplicates(Criteria)
+    End If
+
+    
+    '////////////////// Table filtering code                                                            |
+    '                                                                                                   |
+    'Excel column filtering can be tricky. When there is only one item to be filtered,                  |
+    'the filter object stores this data in its .Criteria1 fields. When there are two                    |
+    'items to be filtered, these two items are stored in the .Criteria1 and .Criteria2                  |
+    'respectively. However, when three or more items are part of the filter, the filtered               |
+    'items are stored as an array in just .Criteria1.                                                   |
+    '                                                                                                   |
+    'In additiona to all of this, there is no way to turn one item on and off within a filter.          |
+    'For instance, I can't use the code to just "turn off," as it were a specific item. Rather,         |
+    'I have to clear out filter itself and then rebuild it without the item. In addition, to assign     |
+    'a filter of three or more items, I have to build a string e.g. "1,2,4,5" of the filtered items     |
+    'and feed it into an array and then assign to a totally new filter.                                 |
+    '                                                                                                   |
+    ' @i - this is a simple iterator. at its max, it will match the total count of filtered items       |
+    ' @iNewCount - this is the new count. it should always reseolve to i - 1, if we're just removing    |
+    '              one item                                                                             |
+    ' @NewArrayString - NewArrayString stores what will be supplied next to the filter. It's a variant  |
+    '                   which means it can take on either the form of a single variable or an           |
+    '                   undimensionalized array at runtime.                                             |
+    
+    
+    Dim i As Long
+    Dim iNewCount As Long
+    
+    iNewCount = 1
+    Dim NewArrayString
+ 
+    'ActiveSheet.AutoFilter.ShowAllData           'Clearing the filter out -- commented out 9/18/19 - so that we keep the existing filtering
+
+    If Not OnlyTwoItems Then            'Here we test if there are only two items. If so, the rules are         |
+                                        'different. What follows is if there are more than two. |
+        ReDim NewCriteria(1 To UBound(Criteria) - 1)
+        For i = LBound(Criteria) To UBound(Criteria)
+            If Not Criteria(i) = "=" & ExclusionItem Then                'Filters are stored in Excel as "={item1},{item2}"
+                NewCriteria(iNewCount) = Replace(Criteria(i), "=", "")  'As we assign the new items, we're remove that ='s
+                iNewCount = iNewCount + 1
+            End If
+        Next
+    Else  'Else condition is triggered if there are only two items
+        
+        'Here we test the two items .Criteria1 and .Criteria2 assigned respecitvely to Criteria and Criteria2.
+        'If the excluded item matches Criteria, then we know Criteria2 is what we want to leave selected, and
+        'vise versa
+        
+        If Criteria = ExclusionItem Then
+            NewCriteria = Criteria2
+        Else
+            NewCriteria = Criteria
+        End If
+    End If
+
+    'After all of this, we'll reapply the filters sans the excluded value. In this configuration,
+    'we don't really care if NewCriteria is an array or a single value. We can assign it just
+    'the same, and Excel will accept it.
+    Selection.AutoFilter Field:=CurrentColumnIndex, _
+        Criteria1:=NewCriteria, Operator:=xlFilterValues
+
+    
+
+End Sub
+
+
+
+Private Sub QuickSort(vArray As Variant, inLow As Long, inHi As Long)
+    Dim pivot   As Variant
+    Dim tmpSwap As Variant
+    Dim tmpLow  As Long
+    Dim tmpHi   As Long
+    
+    tmpLow = inLow
+    tmpHi = inHi
+    
+    pivot = vArray((inLow + inHi) \ 2)
+    
+    While (tmpLow <= tmpHi)
+       While (vArray(tmpLow) < pivot And tmpLow < inHi)
+          tmpLow = tmpLow + 1
+       Wend
+    
+       While (pivot < vArray(tmpHi) And tmpHi > inLow)
+          tmpHi = tmpHi - 1
+       Wend
+    
+       If (tmpLow <= tmpHi) Then
+          tmpSwap = vArray(tmpLow)
+          vArray(tmpLow) = vArray(tmpHi)
+          vArray(tmpHi) = tmpSwap
+          tmpLow = tmpLow + 1
+          tmpHi = tmpHi - 1
+       End If
+    Wend
+    
+    If (inLow < tmpHi) Then QuickSort vArray, inLow, tmpHi
+    If (tmpLow < inHi) Then QuickSort vArray, tmpLow, inHi
+End Sub
+
+Private Sub RemoveDuplicates(OldArray As Variant)
+
+    Dim ArrayUpperBound As Long
+    Dim NewUpperBound As Long
+    
+    Dim i As Long
+    Dim UniqueValueCount As Long
+    ReDim NewArrayOfUniques(1 To UBound(OldArray)) As Variant
+    
+    For i = 1 To UBound(OldArray)
+        If i = 1 Then
+            UniqueValueCount = 1
+            NewArrayOfUniques(i) = OldArray(i)
+        Else
+            If OldArray(i) <> OldArray(i - 1) Then
+                UniqueValueCount = UniqueValueCount + 1
+                NewArrayOfUniques(UniqueValueCount) = OldArray(i)
+            End If
+        End If
+    Next
+    
+    ReDim FinalArray(1 To UniqueValueCount)
+    
+    For i = 1 To UBound(FinalArray)
+        FinalArray(i) = "=" & NewArrayOfUniques(i)
+    
+    Next
+    
+    OldArray = FinalArray
+    
+End Sub
+
+
+Option Explicit
+
+Function MergeCells(sourceRange As Excel.Range) As String
+
+    Dim finalValue As String
+
+    Dim cell As Excel.Range
+
+    For Each cell In sourceRange.Cells
+        If "" = finalValue Then
+            finalValue = CStr(cell.Value)
+        Else
+            finalValue = finalValue & vbNewLine & CStr(cell.Value)
+        End If
+
+    Next cell
+
+    MergeCells = finalValue
+
+End Function
+
+Sub MergeToCell()
+    Selection.Cells(1, 1).Value2 = MergeCells(Selection)
+    Selection.Resize(Selection.Rows.Count - 1).Offset(1).Select
+    Selection.EntireRow.Delete
+    Selection.Cells(1, 1).Select
+
+End Sub
+
+
+Option Explicit
+
+
+Sub Copy_Sheet()
+'
+' Copy_Sheet Macro
+' Copy acive sheet to end of book
+'
+' Keyboard Shortcut: Ctrl+Shift+C
+'
+    Dim ash As Worksheet
+        
+    Set ash = ActiveSheet
+    
+    ash.Select
+    
+    ash.Copy After:=ash
+    
+
+End Sub
+
+Sub Ins_Ser_Nums()
+    Range(ActiveCell.ListObject.Name & "['" & ActiveCell.ListObject.HeaderRowRange.Cells(1, ActiveCell.Column - ActiveCell.ListObject.Range.Column + 1).Value & "]").Select
+    Selection.ClearContents
+    ActiveCell.ListObject.HeaderRowRange.Cells(2, ActiveCell.Column - ActiveCell.ListObject.Range.Column + 1).Select
+
+    ActiveCell.Value = 1
+    ActiveCell.Offset(1).Select
+    ActiveCell.Value = 2
+    ActiveCell.Offset(1).Select
+    ActiveCell.Value = 3
+
+' Then, go back to top
+    ActiveCell.ListObject.HeaderRowRange.Cells(2, ActiveCell.Column - ActiveCell.ListObject.Range.Column + 1).Select
+' resize
+    Selection.Resize(3).Select
+    Selection.AutoFill Destination:=Range(ActiveCell.ListObject.Name & "['" & ActiveCell.ListObject.HeaderRowRange.Cells(1, ActiveCell.Column - ActiveCell.ListObject.Range.Column + 1).Value & "]")
+
+
+End Sub
+
+Sub Ins_Desc_Nums()
+    Range(ActiveCell.ListObject.Name & "['" & ActiveCell.ListObject.HeaderRowRange.Cells(1, ActiveCell.Column - ActiveCell.ListObject.Range.Column + 1).Value & "]").Select
+    Selection.ClearContents
+    ActiveCell.ListObject.HeaderRowRange.Cells(2, ActiveCell.Column - ActiveCell.ListObject.Range.Column + 1).Select
+
+    ActiveCell.Value = ActiveSheet.ListObjects(ActiveCell.ListObject.Name).Range.Rows.Count - 1
+    ActiveCell.Offset(1).Select
+    ActiveCell.Value = ActiveSheet.ListObjects(ActiveCell.ListObject.Name).Range.Rows.Count - 2
+    ActiveCell.Offset(1).Select
+    ActiveCell.Value = ActiveSheet.ListObjects(ActiveCell.ListObject.Name).Range.Rows.Count - 3
+
+' Then, go back to top
+    ActiveCell.ListObject.HeaderRowRange.Cells(2, ActiveCell.Column - ActiveCell.ListObject.Range.Column + 1).Select
+' resize
+    Selection.Resize(3).Select
+    Selection.AutoFill Destination:=Range(ActiveCell.ListObject.Name & "['" & ActiveCell.ListObject.HeaderRowRange.Cells(1, ActiveCell.Column - ActiveCell.ListObject.Range.Column + 1).Value & "]")
+
+End Sub
+
+
+Sub toggle_hilite()
+'
+' yellow Macro
+' Toggle cell highilght
+'
+' Keyboard Shortcut: Ctrl+Shift+H
+'
+    With Selection.Interior
+        If .Color = 16777215 Then ' 25 bits all 1
+            .Color = 65535
+        Else
+            .Pattern = xlNone
+            .TintAndShade = 0
+            .PatternTintAndShade = 0
+        End If
+
+    End With
+
+End Sub
+
+Sub thickEdge()
+
+    Selection.Borders(xlDiagonalDown).LineStyle = xlNone
+    Selection.Borders(xlDiagonalUp).LineStyle = xlNone
+    With Selection.Borders(xlEdgeLeft)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThick
+    End With
+    With Selection.Borders(xlEdgeTop)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThick
+    End With
+    With Selection.Borders(xlEdgeBottom)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThick
+    End With
+    With Selection.Borders(xlEdgeRight)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThick
+    End With
+    Selection.Borders(xlInsideVertical).LineStyle = xlNone
+    Selection.Borders(xlInsideHorizontal).LineStyle = xlNone
+End Sub
+
+Option Explicit
+
+Option Compare Text
+
+Sub Go_Home()
+    If ActiveWorkbook.Worksheets(1).Name = "home" Then
+        ActiveWorkbook.Worksheets(1).Activate
+        Exit Sub
+    End If
+    If ActiveWorkbook.Worksheets(1).Name = "toc" Then
+        ActiveWorkbook.Worksheets(1).Activate
+        Exit Sub
+    End If
+    If ActiveWorkbook.Worksheets(1).Name = "contents" Then
+        ActiveWorkbook.Worksheets(1).Activate
+        Exit Sub
+    End If
+    If ActiveWorkbook.Worksheets(1).Name = "readme" Then
+        ActiveWorkbook.Worksheets(1).Activate
+        Exit Sub
+    End If
+    If ActiveWorkbook.Worksheets(2).Name = "home" Then
+        ActiveWorkbook.Worksheets(2).Activate
+        Exit Sub
+    End If
+    If ActiveWorkbook.Worksheets(2).Name = "toc" Then
+        ActiveWorkbook.Worksheets(2).Activate
+        Exit Sub
+    End If
+    If ActiveWorkbook.Worksheets(2).Name = "contents" Then
+        ActiveWorkbook.Worksheets(2).Activate
+        Exit Sub
+    End If
+    If ActiveWorkbook.Worksheets(2).Name = "readme" Then
+        ActiveWorkbook.Worksheets(2).Activate
+        Exit Sub
+    End If
+End Sub
+
+
+
