@@ -1,3 +1,5 @@
+Option Explicit
+
 Private Sub Worksheet_SelectionChange(ByVal Target As Range)
     If Target.Cells.CountLarge > 1 Then Exit Sub
     Application.ScreenUpdating = False
@@ -488,7 +490,6 @@ Private Sub RemoveDuplicates(OldArray As Variant)
 End Sub
 
 
-Option Explicit
 
 Function MergeCells(sourceRange As Excel.Range) As String
 
@@ -517,8 +518,6 @@ Sub MergeToCell()
 
 End Sub
 
-
-Option Explicit
 
 
 Sub Copy_Sheet()
