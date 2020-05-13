@@ -407,7 +407,8 @@ Public Sub ExcludeFromFilter()
         'If the excluded item matches Criteria, then we know Criteria2 is what we want to leave selected, and
         'vise versa
         
-        If Criteria = ExclusionItem Then
+        'Added "=" on the line below. 'Ronald Calma
+        If Criteria = "=" & ExclusionItem Then
             NewCriteria = Criteria2
         Else
             NewCriteria = Criteria
