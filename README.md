@@ -1,7 +1,7 @@
 # excel
 Personal macro workbook and other helpful stuff
 
-Please check out the YouTube video on how to use this (coming soon)
+Please check out the YouTube video on how to use this https://youtu.be/TLteaxtuxoo
 
 What is the personal macro workbook and why should you care :
 
