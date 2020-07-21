@@ -693,16 +693,19 @@ Application.ScreenUpdating = False
  
 
 Dim isheet, column_name As String
-Dim irow, lastcolumn, lastrow, counter As Double
+Dim irow, irow_header, lastcolumn, lastrow, counter As Double
 Dim table_name, index_column, header_column, value_column, blank_column As String
 Dim i, j As Integer
 
+
 'name of sheet with source data
 isheet = ActiveSheet.Name
+'row number from where header has to be copied
+irow_header = Range(ActiveCell.ListObject.HeaderRowRange.Address).Row
 'row number from where data has to be copied
 irow = ActiveCell.Row
 'total number of columns in source data
-lastcolumn = Sheets(isheet).Range("zz6").End(xlToLeft).Column
+lastcolumn = Sheets(isheet).Range("zz" & irow_header).End(xlToLeft).Column
 'calculates number of tables required, one table is required for every 20 columns
 counter = Application.WorksheetFunction.RoundUp(lastcolumn / 20, 0)
 
@@ -745,7 +748,7 @@ Next j
 
 
 ' this part copy pastes column headers
-Sheets(isheet).Range(ColumnLetter(3 + (i - 1) * 20) & "6:" & ColumnLetter(2 + 20 + (i - 1) * 20) & "6").Copy
+Sheets(isheet).Range(ColumnLetter(3 + (i - 1) * 20) & irow_header & ":" & ColumnLetter(2 + 20 + (i - 1) * 20) & irow_header).Copy
 Sheets("Legend").Range(header_column & lastrow).PasteSpecial Paste:=xlValue, Transpose:=True
 
 ' this part copy pastes data of specific row
