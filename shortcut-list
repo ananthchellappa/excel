@@ -1,0 +1,8 @@
+CTRL ALT N : Open a *copy* of the active sheet as a new Book - so you can hack at will
+CTRL SHIFT C : Create a copy of the active sheet in the same workbook
+CTRL SHIFT ] : Enter "Highlight row and column of active cell" mode (with a confirm dialog when custom highlighting detected on the sheet) (aka CrossHair)
+CTRL SHIFT [ : Exit "Highlight row and column of active cell" mode
+CTRL SHIFT F : Filter table (if already filtered using another column, then add to the filtering) by only showing (of the currently visible rows) only those for which this column's entry matches the active cell's value
+CTRL SHIFT N : Set filter to the next value in this column's element list
+CTRL SHIFT B : Set filter to previous value in this column's element list
+CTRL SHIFT E : Exclude filter (add to) - of the visible rows, filter out (don't show) rows for which this column's entry matches active cell's value
