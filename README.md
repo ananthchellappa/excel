@@ -11,7 +11,7 @@ the personal macro workbook, you have those available to you - whereas, if you d
 the personal macro workbook approach, you'd have to include these macros in that other
 workbook and save it as a macro enabled workbook.
 
-What if someone sent you a plan xlsx with tables that you now want to manipulate (just for
+What if someone sent you a plain xlsx with tables that you now want to manipulate (just for
 analysis). If you didn't have the personal macro workbook, you'd have to first insert your
 favourite routines into that workbook to be able to use them.
 
