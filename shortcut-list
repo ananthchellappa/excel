@@ -9,3 +9,17 @@ CTRL SHIFT B : Set filter to previous value in this column's element list
 CTRL SHIFT E : Exclude filter (add to) - of the visible rows, filter out (don't show) rows for which this column's entry matches active cell's value
 CTRL SHIFT X : If active cell is in a table, then create a new sheet with that cell's entire row data displayed in an easy to read format, with a CLOSE button.
                Try it out! (Thanks Shubh and Kopal Kaushik) (New sheet is called Legend)
+CTRL ALT SHIFT DEL : Delete active sheet without confirmation!
+
+Accomplished by this code in the PERSONAL.XLSB's "ThisWorkbook" (access with ALT-F11)
+Private Sub Workbook_Open()
+    Application.OnKey "^+{]}", "PERSONAL.XLSB!startCrossHair"   '  start :)
+    Application.OnKey "^+{[}", "PERSONAL.XLSB!stopCrossHair"   '  stop highlighting
+    Application.OnKey "^{RIGHT}", "PERSONAL.XLSB!MoveColumnToRight"
+    Application.OnKey "^{LEFT}", "PERSONAL.XLSB!MoveColumnToLeft"
+    Application.OnKey "^%f", "PERSONAL.XLSB!clear_filter"
+    Application.OnKey "^%n", "PERSONAL.XLSB!CopyToNew"  ' ActiveSheet.Copy
+    Application.OnKey "^%c", "PERSONAL.XLSB!Clear_Current_Col_Filter"   ' CTRL+ALT+C
+    Application.OnKey "^%g", "PERSONAL.XLSB!Toggle_Grid"    ' CTRL+ALT+G
+    Application.OnKey "^%+{DEL}", "PERSONAL.XLSB!DeleteThis"  'CTRL+ALT+SHIFT+DEL
+End Sub
