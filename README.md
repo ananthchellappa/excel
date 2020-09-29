@@ -1,9 +1,9 @@
-# excel
+# Excel Productivity Pack - Welcome!
 Personal macro workbook and other helpful stuff
 
 Please check out the YouTube video on how to use this https://youtu.be/TLteaxtuxoo
 
-What is the personal macro workbook and why should you care :
+What the Personal Macro Workbook is and why you should care :
 
 It is a collection of routines that are available to use in ANY other workbook.
 If there are certain routines you love, such as for filtering tables, then, if you use
@@ -17,7 +17,7 @@ favourite routines into that workbook to be able to use them.
 
 Where is it stored?
 
-This can vary. The easiest way to find this out, something you have to know if you wan to use
+This can vary. The easiest way to find this out, something you have to know if you want to use
 someone eise's PMWB, is to create a dummy PMWB and then view it and see what the location is :
 
 In the Developer (how do you get this on your Ribbon? Google it!) tab, go to Record Macro and
@@ -26,7 +26,7 @@ click on a cell and then stop and then. Go to the View Tab and click on Unhide a
 PERSONAL. Then, with the PERSONAL macro workbook open, you can just do File Save as to see where
 it is currently saved.
 
-How do I use someone elses Personal Macro Workbook (PMWB)?
+How do I use someone else's Personal Macro Workbook (PMWB)?
 
 Having found out where Excel stores your PMWB, exit Excel and then, go to that location and delete
 the dummy PWMB and now move the one you want to use to that location. Make sure the PMWB is
@@ -34,5 +34,7 @@ from someone you trust. The source code should be available.
 
 Having said that, how should you use the PMWB featured here if you don't trust it?
 
-Ans : Use the attached source code - you can put it all into a single module within your dummy PMWB
+Ans : Use the attached source code (may not be completely up to date) - you can put it all into a single module within your dummy PMWB
 if you wish.
+
+Most of the utilities included were developed by developers I found through Upwork. The motivation was to boost my own productivity at work. If you benefit from them and want to chip in, feel free to using paypal.me/AnanthChellappa and drop a note telling me what new utilities you'd like!
