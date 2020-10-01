@@ -1,22 +1,33 @@
 CTRL H : Return "Home" (If one of the first two worksheets is called (any of) home,toc,contents,readme or index, make it the Active Sheet)
-CTRL ALT T : Create a table of contents (If one already exists, update it) (Handy for starting with a big Workbook inherited from someone else - let's you navigate with links rather than just the tabs on the bottom row :)
-CTRL SHIFT X : If active cell is in a table, then create a new sheet with that cell's entire row data displayed in an easy to read format, with a CLOSE button. Try it out!  (New sheet is called Legend) (Very handy for very wide tables with lots of data..(Thanks Shubh and Kopal Kaushik))
+CTRL ALT T : Create a table of contents (If one already exists, update it) (Handy for starting with a big Workbook inherited from someone else - 
+             let's you navigate with links rather than just the tabs on the bottom row :)
+CTRL SHIFT X : If active cell is in a table, then create a new sheet with that cell's entire row data displayed in an easy to read format,
+               with a CLOSE button. Try it out!  (New sheet is called Legend) (Very handy for very wide tables with lots of data..(Thanks Shubh and Kopal Kaushik))
 CTRL ALT G : Toggle the grid
 CTRL SHIFT H : by default this is "Hide current row". I remap this to "Toggle active cell fill (Yellow)" (use Application.OnKey to remap reliably..)
 CTRL SHIFT C : Create a copy of the active sheet in the same workbook
 CTRL ALT N : Open a *copy* of the active sheet as a new Book - so you can hack at will
-CTRL SHIFT ] : Enter "Highlight row and column of active cell" mode (with a confirm dialog when custom highlighting detected on the sheet) (aka CrossHair) Useful for presentations
+CTRL SHIFT ] : Enter "Highlight row and column of active cell" mode (with a confirm dialog when custom highlighting detected on the sheet)
+             (aka CrossHair) Useful for presentations
 CTRL SHIFT [ : Exit "Highlight row and column of active cell" mode
-CTRL SHIFT F : Filter table (if already filtered using another column, then add to the filtering) by only showing (of the currently visible rows) only those for which this column's entry matches the active cell's value
+CTRL SHIFT F : Filter table (if already filtered using another column, then add to the filtering) by only showing (of the currently visible rows)
+              only those for which this column's entry matches the active cell's value
 CTRL SHIFT N : Set filter to the next value in this column's element list
 CTRL SHIFT B : Set filter to previous value in this column's element list
 CTRL SHIFT E : Exclude filter (add to Table's existing filter) - of the visible rows, filter out (don't show) rows for which this column's entry matches active cell's value
 CTRL ALT F : Clear the Table's filter (and dismiss the filter drop-down buttons)
 CTRL ALT C : Clear filter from this column (of active cell) only
+CTRL SHIFT A : Re-arrange the rows of the table by sorting this column in ascending order
+CTRL SHIFT D : Re-arrange the rows of the table by sorting this column in descending order
 CTRL ALT SHIFT DEL : Delete active sheet without confirmation!
 CTRL Right Arrow : Move column (of active cell) right (aka swap its position it with its right neighbor)
 CTRL Left Arrow : Move column to the left (aka swap its position with its left neighbor)
-
+CTRL - : (native, not custom) : Delete selection (row or cell or column) (- = “minus”)
+CTRL T : Add a copy of the current row of the Table immediately above
+CTRL SHIFT T : Add a copy of the current row of the Table above the first non-blank row of the table (i.e., at the top)
+CTRL SHIFT V : Fill the column with a serial numbers, in ascending (top-most is lowest) order (it’s always useful to have a serial-number column
+               so that you can always send the table back to its original state after re-arranging based on other columns
+CTRL SHIFT W : Fill the column with serial numbers in descending order. This is not a bad idea - you can see how many rows you have at a glance :)
 
 Accomplished by this code in the PERSONAL.XLSB's "ThisWorkbook" (access with ALT-F11)
 Private Sub Workbook_Open()
