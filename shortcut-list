@@ -11,13 +11,15 @@ CTRL SHIFT ] : Enter "Highlight row and column of active cell" mode (with a conf
              (aka CrossHair) Useful for presentations
 CTRL SHIFT [ : Exit "Highlight row and column of active cell" mode
 CTRL SHIFT F : Filter table (if already filtered using another column, then add to the filtering) by only showing (of the currently visible rows)
-              only those for which this column's entry matches the active cell's value
+              only those for which this column's entry matches the active cell's value.
+              This, along with CTRL ALT F is one way of getting the filter buttons to show, if they are not currently visible
 CTRL SHIFT N : Set filter to the next value in this column's element list
 CTRL SHIFT B : Set filter to previous value in this column's element list
 CTRL SHIFT E : Exclude filter (add to Table's existing filter) - of the visible rows, filter out (don't show) rows for which this column's entry matches active cell's value
 CTRL ALT F : Clear the Table's filter (and dismiss the filter drop-down buttons)
 CTRL ALT C : Clear filter from this column (of active cell) only
-CTRL SHIFT A : Re-arrange the rows of the table by sorting this column in ascending order
+CTRL SHIFT A : Re-arrange the rows of the table by sorting this column in ascending order - very useful to have a "serial number" column
+               since you can then use that column to sort and return the table to original state anytime
 CTRL SHIFT D : Re-arrange the rows of the table by sorting this column in descending order
 CTRL ALT SHIFT DEL : Delete active sheet without confirmation!
 CTRL Right Arrow : Move column (of active cell) right (aka swap its position it with its right neighbor)
