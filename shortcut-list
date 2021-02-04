@@ -12,7 +12,7 @@ CTRL SHIFT ] : Enter "Highlight row and column of active cell" mode (with a conf
 CTRL SHIFT [ : Exit "Highlight row and column of active cell" mode
 CTRL SHIFT F : Filter table (if already filtered using another column, then add to the filtering) by only showing (of the currently visible rows)
               only those for which this column's entry matches the active cell's value.
-              This, along with CTRL ALT F is one way of getting the filter buttons to show, if they are not currently visible
+              This, along with CTRL ALT C (unfilter current column) is one way of getting the filter buttons to show, if they are not currently visible
 CTRL SHIFT N : Set filter to the next value in this column's element list
 CTRL SHIFT B : Set filter to previous value in this column's element list
 CTRL SHIFT E : Exclude filter (add to Table's existing filter) - of the visible rows, filter out (don't show) rows for which this column's entry matches active cell's value
