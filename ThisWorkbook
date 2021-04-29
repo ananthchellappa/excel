@@ -1,0 +1,19 @@
+' Put this in the ThisWorkbook module in your PERSONAL.XLSB to get these shortcuts
+Option Explicit
+
+Private Sub Workbook_Open()
+    Application.OnKey "^+{]}", "PERSONAL.XLSB!startCrossHair"   '  start :)
+    Application.OnKey "^+{[}", "PERSONAL.XLSB!stopCrossHair"   '  stop highlighting
+    Application.OnKey "^{RIGHT}", "PERSONAL.XLSB!MoveColumnToRight"
+    Application.OnKey "^{LEFT}", "PERSONAL.XLSB!MoveColumnToLeft"
+    Application.OnKey "^%f", "PERSONAL.XLSB!clear_filter"
+    Application.OnKey "^%n", "PERSONAL.XLSB!CopyToNew"  ' ActiveSheet.Copy
+    Application.OnKey "^%c", "PERSONAL.XLSB!Clear_Current_Col_Filter"   ' CTRL+ALT+C
+    Application.OnKey "^%g", "PERSONAL.XLSB!Toggle_Grid"    ' CTRL+ALT+G
+    Application.OnKey "^%+{DEL}", "PERSONAL.XLSB!DeleteThis"  'CTRL+ALT+SHIFT+DEL
+    Application.OnKey "^%t", "PERSONAL.XLSB!createTOC"      'CTRL-ALT-T
+    Application.OnKey "^+h", "PERSONAL.XLSB!toggle_hilite"      'CTRL-SHIFT-H
+    Application.OnKey "^+c", "PERSONAL.XLSB!Copy_Sheet"      'CTRL-SHIFT-C
+    Application.OnKey "^%a", "PERSONAL.XLSB!sort_serial_asc"      'CTRL-ALT-A
+
+End Sub
