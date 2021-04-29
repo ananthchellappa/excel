@@ -113,6 +113,26 @@ Sub sort_col_asc()
     End With
 End Sub
 
+'4/29/21 If you're in a table, hit CTRL-ALT-A to sort using the # column
+Sub sort_serial_asc()
+    Dim TableName As String
+    Dim TableHeader As String
+    
+    TableName = ActiveCell.ListObject.Name
+
+    
+    With ActiveCell.ListObject.Sort
+        .SortFields.Clear
+        .SortFields.Add2 Key:=Range(TableName & "[[#All],['#]]"), SortOn:=xlSortOnValues, _
+            Order:=xlAscending, DataOption:=xlSortNormal
+        .Header = xlYes
+        .MatchCase = False
+        .Orientation = xlTopToBottom
+        .Apply
+                
+    End With
+End Sub
+
 
 '           from Jordan Goldmeier
 
