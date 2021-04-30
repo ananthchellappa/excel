@@ -15,5 +15,6 @@ Private Sub Workbook_Open()
     Application.OnKey "^+h", "PERSONAL.XLSB!toggle_hilite"      'CTRL-SHIFT-H
     Application.OnKey "^+c", "PERSONAL.XLSB!Copy_Sheet"      'CTRL-SHIFT-C
     Application.OnKey "^%a", "PERSONAL.XLSB!sort_serial_asc"      'CTRL-ALT-A
+    Application.OnKey "^j", "PERSONAL.XLSB!CenterStage.CenterStage"      'CTRL-J
 
 End Sub
