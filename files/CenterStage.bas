@@ -1,4 +1,3 @@
-Attribute VB_Name = "CenterStage"
 Option Explicit
 Sub CenterStage()
 Dim rngFrozen As Range
@@ -82,17 +81,17 @@ Function GetHiddenColumns() As String
   End With
   
   On Error Resume Next
-  Set cstmDocProp = ThisWorkbook.CustomDocumentProperties(sHCols)
+  Set cstmDocProp = ActiveWorkbook.CustomDocumentProperties(sHCols)
   
   
   'If the property doesn't exist, create it and set the initial value
   If Err.Number > 0 Then
-    ThisWorkbook.CustomDocumentProperties.Add _
+    ActiveWorkbook.CustomDocumentProperties.Add _
     Name:=sHCols, _
     LinkToContent:=False, _
     Type:=msoPropertyTypeString, _
     Value:=strCols
-    Set cstmDocProp = ThisWorkbook.CustomDocumentProperties(sHCols)
+    Set cstmDocProp = ActiveWorkbook.CustomDocumentProperties(sHCols)
   End If
   On Error GoTo 0
   
@@ -113,14 +112,14 @@ Function GetMode() As String
   
   'If the name doesn't exist, create it and set the initial value to Original
   On Error Resume Next
-  Set cstmDocProp = ThisWorkbook.CustomDocumentProperties(sMode)
+  Set cstmDocProp = ActiveWorkbook.CustomDocumentProperties(sMode)
   If Err.Number > 0 Then
-    ThisWorkbook.CustomDocumentProperties.Add _
+    ActiveWorkbook.CustomDocumentProperties.Add _
     Name:=sMode, _
     LinkToContent:=False, _
     Type:=msoPropertyTypeString, _
     Value:="Original"
-    Set cstmDocProp = ThisWorkbook.CustomDocumentProperties(sMode)
+    Set cstmDocProp = ActiveWorkbook.CustomDocumentProperties(sMode)
   End If
   
   GetMode = cstmDocProp.Value
@@ -132,9 +131,9 @@ Sub ToggleMode()
   'If the name doesn't exist, we create it and set the initial value to 1
   On Error Resume Next
   Dim cstmDocProp As DocumentProperty
-  Set cstmDocProp = ThisWorkbook.CustomDocumentProperties(sMode)
+  Set cstmDocProp = ActiveWorkbook.CustomDocumentProperties(sMode)
   If Err.Number > 0 Then
-    ThisWorkbook.CustomDocumentProperties.Add _
+    ActiveWorkbook.CustomDocumentProperties.Add _
     Name:=sMode, _
     LinkToContent:=False, _
     Type:=msoPropertyTypeString, _
@@ -143,13 +142,13 @@ Sub ToggleMode()
     On Error GoTo 0
     'if mode property exists, toggle the value
     Dim sModeVal As String
-    sModeVal = ThisWorkbook.CustomDocumentProperties(sMode).Value
+    sModeVal = ActiveWorkbook.CustomDocumentProperties(sMode).Value
 
     '   Toggle the mode value
     If sModeVal = "Original" Then
-      ThisWorkbook.CustomDocumentProperties(sMode).Value = "Presentation"
+      ActiveWorkbook.CustomDocumentProperties(sMode).Value = "Presentation"
     Else
-      ThisWorkbook.CustomDocumentProperties(sMode).Value = "Original"
+      ActiveWorkbook.CustomDocumentProperties(sMode).Value = "Original"
     End If
          
   End If
