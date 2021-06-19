@@ -9,7 +9,7 @@ CTRL SHIFT C : Create a copy of the active sheet in the same workbook
 CTRL ALT N : Open a *copy* of the active sheet as a new Book - so you can hack at will
 CTRL SHIFT ] : Enter "Highlight row and column of active cell" mode (with a confirm dialog when custom highlighting detected on the sheet)
              (aka CrossHair) Useful for presentations
-CTRL SHIFT [ : Exit "Highlight row and column of active cell" mode
+CTRL SHIFT [ : Exit "Highlight row and column of active cell" mode (Sebastian Bulz)
 CTRL SHIFT F : Filter table (if already filtered using another column, then add to the filtering) by only showing (of the currently visible rows)
               only those for which this column's entry matches the active cell's value.
               This, along with CTRL ALT C (unfilter current column) is one way of getting the filter buttons to show, if they are not currently visible
@@ -30,6 +30,10 @@ CTRL SHIFT T : Add a copy of the current row of the Table above the first non-bl
 CTRL SHIFT V : Fill the column with a serial numbers, in ascending (top-most is lowest) order (it’s always useful to have a serial-number column
                so that you can always send the table back to its original state after re-arranging based on other columns
 CTRL SHIFT W : Fill the column with serial numbers in descending order. This is not a bad idea - you can see how many rows you have at a glance :)
+CTRL SHIFT > : Enter row-only highlight mode (Sebastian Bulz)
+CTRL SHIFT < : Exit row-only highlight mode (Sebastian Bulz)
+CTRL J : Center stage - you have a frozen section at the left that you want always visible. Get the columns of the selected cells adjacent to 
+           that section by hiding the intervening columns (and vice versa - so this one toggles it). Very handy for analysis of data. Thanks Khurram Mukhtar
 
 Accomplished by this code in the PERSONAL.XLSB's "ThisWorkbook" (access with ALT-F11)
 Private Sub Workbook_Open()
