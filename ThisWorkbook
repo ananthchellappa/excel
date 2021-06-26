@@ -4,6 +4,8 @@ Option Explicit
 Private Sub Workbook_Open()
     Application.OnKey "^+{]}", "PERSONAL.XLSB!startCrossHair"   '  start :)
     Application.OnKey "^+{[}", "PERSONAL.XLSB!stopCrossHair"   '  stop highlighting
+    Application.OnKey "^+.", "PERSONAL.XLSB!StartRowHighlight"   '  start :)
+    Application.OnKey "^+,", "PERSONAL.XLSB!StopRowHighlight"   '  stop highlighting
     Application.OnKey "^{RIGHT}", "PERSONAL.XLSB!MoveColumnToRight"
     Application.OnKey "^{LEFT}", "PERSONAL.XLSB!MoveColumnToLeft"
     Application.OnKey "^%f", "PERSONAL.XLSB!clear_filter"
@@ -16,5 +18,7 @@ Private Sub Workbook_Open()
     Application.OnKey "^+c", "PERSONAL.XLSB!Copy_Sheet"      'CTRL-SHIFT-C
     Application.OnKey "^%a", "PERSONAL.XLSB!sort_serial_asc"      'CTRL-ALT-A
     Application.OnKey "^j", "PERSONAL.XLSB!CenterStage.CenterStage"      'CTRL-J
+    Application.OnKey "^%e", "PERSONAL.XLSB!Go_To_Block_End"    'CTRL-ALT-E
+    Application.OnKey "^%s", "PERSONAL.XLSB!Go_To_Block_Start"    'CTRL-ALT-S
 
 End Sub
