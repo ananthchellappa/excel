@@ -1,0 +1,88 @@
+Option Explicit
+
+Sub Go_To_Block_Start()
+
+Dim lobj As ListObject
+Dim i As Long
+Dim activecell_value
+Dim activecell_col As Long
+
+On Error Resume Next
+
+Set lobj = ActiveSheet.ListObjects(1)
+
+On Error GoTo 0
+
+If lobj Is Nothing Then
+    
+    Exit Sub
+    
+End If
+
+If Intersect(ActiveCell, lobj.Range) Is Nothing Then
+    
+    Exit Sub
+    
+End If
+
+activecell_value = ActiveCell.Value
+
+activecell_col = ActiveCell.Column
+
+For i = ActiveCell.Row To lobj.HeaderRowRange.Row + 1 Step -1
+    
+    If Cells(i, activecell_col) <> activecell_value Then
+        
+        Cells(i, activecell_col).Select
+        
+        Exit Sub
+        
+    End If
+    
+Next
+
+End Sub
+
+
+Sub Go_To_Block_End()
+
+Dim lobj As ListObject
+Dim i As Long
+Dim activecell_value
+Dim activecell_col As Long
+
+On Error Resume Next
+
+Set lobj = ActiveSheet.ListObjects(1)
+
+On Error GoTo 0
+
+If lobj Is Nothing Then
+    
+    Exit Sub
+    
+End If
+
+If Intersect(ActiveCell, lobj.Range) Is Nothing Then
+    
+    Exit Sub
+    
+End If
+
+activecell_value = ActiveCell.Value
+
+activecell_col = ActiveCell.Column
+
+For i = ActiveCell.Row To lobj.HeaderRowRange.Row + lobj.DataBodyRange.Rows.count
+    
+    If Cells(i, activecell_col) <> activecell_value Then
+        
+        Cells(i, activecell_col).Select
+        
+        Exit Sub
+        
+    End If
+    
+Next
+
+End Sub
