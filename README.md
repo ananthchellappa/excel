@@ -37,4 +37,4 @@ Having said that, how should you use the PMWB featured here if you don't trust i
 Ans : Use the attached source code (may not be completely up to date) - you can put it all into a single module within your dummy PMWB
 if you wish.
 
-Most of the utilities included were developed by developers I found through Upwork. The motivation was to boost my own productivity at work. The total spent was in the vicinity of $800. If you benefit from them and want to chip in, feel free to using https://www.paypal.com/paypalme/AnanthChellappa and drop a note telling me what new utilities you'd like! For those who chipped in, thank you! You made my day!
+Most of the utilities included were developed by developers I found through Upwork. The motivation was to boost my own productivity at work. The total spent was in the vicinity of $1k. If you benefit from them and want to chip in, feel free to using https://www.paypal.com/paypalme/AnanthChellappa and drop a note telling me what new utilities you'd like! For those who chipped in, thank you! You made my day!
