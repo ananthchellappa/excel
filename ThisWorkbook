@@ -20,5 +20,12 @@ Private Sub Workbook_Open()
     Application.OnKey "^j", "PERSONAL.XLSB!CenterStage.CenterStage"      'CTRL-J
     Application.OnKey "^%e", "PERSONAL.XLSB!Go_To_Block_End"    'CTRL-ALT-E
     Application.OnKey "^%s", "PERSONAL.XLSB!Go_To_Block_Start"    'CTRL-ALT-S
+    Application.OnKey "^t", "PERSONAL.XLSB!CopyRow"    'CTRL-T
+    Application.OnKey "^+t", "PERSONAL.XLSB!CopyToTop"    'CTRL-SHIFT-T
+    Application.OnKey "^%h", "PERSONAL.XLSB!FilterOdd"    'CTRL-ALT-H
+    Application.OnKey "^%+h", "PERSONAL.XLSB!FilterOddSelectedColumn"    'CTRL-ALT-SHIFT-H
+    Application.OnKey "^%+s", "PERSONAL.XLSB!Save_Filter_Form_Start" 'CTRL-ALT-SHIFT-S
+    Application.OnKey "^%+v", "PERSONAL.XLSB!View_Filters_Form_Start" 'CTRL-ALT-SHIFT-V
+    Application.OnKey "^%+f", "PERSONAL.XLSB!Apply_Default_Filter" 'CTRL-ALT-SHIFT-F
 
 End Sub
