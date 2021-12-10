@@ -27,5 +27,7 @@ Private Sub Workbook_Open()
     Application.OnKey "^%+s", "PERSONAL.XLSB!Save_Filter_Form_Start" 'CTRL-ALT-SHIFT-S
     Application.OnKey "^%+v", "PERSONAL.XLSB!View_Filters_Form_Start" 'CTRL-ALT-SHIFT-V
     Application.OnKey "^%+f", "PERSONAL.XLSB!Apply_Default_Filter" 'CTRL-ALT-SHIFT-F
-
+    Application.OnKey "^{]}", "PERSONAL.XLSB!incr_font" 'CTRL+]
+    Application.OnKey "^{[}", "PERSONAL.XLSB!decr_font" 'CTRL+]
 End Sub
+
