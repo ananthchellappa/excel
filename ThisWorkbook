@@ -29,5 +29,7 @@ Private Sub Workbook_Open()
     Application.OnKey "^%+f", "PERSONAL.XLSB!Apply_Default_Filter" 'CTRL-ALT-SHIFT-F
     Application.OnKey "^{]}", "PERSONAL.XLSB!incr_font" 'CTRL+]
     Application.OnKey "^{[}", "PERSONAL.XLSB!decr_font" 'CTRL+]
+    Application.OnKey "%{UP}", "PERSONAL.XLSB!incr" 'ALT+DownArrow
+    Application.OnKey "%{DOWN}", "PERSONAL.XLSB!decr" 'ALT+UpArrow
 End Sub
 
