@@ -134,3 +134,15 @@ End Sub
 Sub decr_font()
     Selection.Font.Size = Selection.Font.Size - 1
 End Sub
+
+Sub incr()
+    If (IsNumeric(Selection.Value) Or IsDate(Selection.Value)) And Selection.Value <> "" Then
+        Selection.Value = Selection.Value + 1
+    End If
+End Sub
+
+Sub decr()
+    If (IsNumeric(Selection.Value) Or IsDate(Selection.Value)) And Selection.Value <> "" Then
+        Selection.Value = Selection.Value - 1
+    End If
+End Sub
