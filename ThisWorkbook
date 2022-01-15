@@ -31,5 +31,6 @@ Private Sub Workbook_Open()
     Application.OnKey "^{[}", "PERSONAL.XLSB!decr_font" 'CTRL+]
     Application.OnKey "%{UP}", "PERSONAL.XLSB!incr" 'ALT+DownArrow
     Application.OnKey "%{DOWN}", "PERSONAL.XLSB!decr" 'ALT+UpArrow
+    Application.OnKey "%n", "PERSONAL.XLSB!Num_Eng.Num_Eng" 'ALT-N
 End Sub
 
