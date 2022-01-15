@@ -31,6 +31,7 @@ Private Sub Workbook_Open()
     Application.OnKey "^{[}", "PERSONAL.XLSB!decr_font" 'CTRL+]
     Application.OnKey "%{UP}", "PERSONAL.XLSB!incr" 'ALT+DownArrow
     Application.OnKey "%{DOWN}", "PERSONAL.XLSB!decr" 'ALT+UpArrow
-    Application.OnKey "%n", "PERSONAL.XLSB!Num_Eng.Num_Eng" 'ALT-N
+    Application.OnKey "^%+n", "PERSONAL.XLSB!Num_Eng.Num_Eng" 'CTRL-ALT-SHIFT-N
+    Application.OnKey "^%d", "PERSONAL.XLSB!ActiveTableFillInBlanks" 'CTRL-ALT-D
 End Sub
 
