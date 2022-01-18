@@ -1,4 +1,3 @@
-Attribute VB_Name = "Num_Eng"
 Sub Num_Eng()
     
 Dim cel As Range
@@ -12,7 +11,9 @@ For Each cel In Selection
             cel = NumToEng(CStr(cel))
             Else: cel = "-" & NumToEng(CStr(Abs(cel)))
             End If
-        Else: cel = EngToNum(CStr(cel))
+        ElseIf IsNumeric(Left(cel, Len(cel) - 1)) = True Then
+        
+        cel = EngToNum(CStr(cel))
         
         End If
     End If
