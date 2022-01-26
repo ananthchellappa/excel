@@ -1,4 +1,3 @@
-Attribute VB_Name = "Waves"
 Public Type commandItem
     cell As Range
     cellValue As String
@@ -21,7 +20,7 @@ Dim addNewRows As Boolean
 addNewRows = True
 
 'Checks
-If Selection.Rows.count > 1 Then
+If Selection.Rows.Count > 1 Then
     MsgBox "Selecting more than 1 row is not allowed.", vbInformation
     Exit Sub
 End If
@@ -31,6 +30,7 @@ IsValid = False
 For Each c In Selection
     If Left(Trim(UCase(c.Value)), 1) = "W" Or _
        Left(Trim(UCase(c.Value)), 1) = "M" Or _
+       Left(Trim(UCase(c.Value)), 1) = "E" Or _
        Left(Trim(UCase(c.Value)), 2) = "AT" Or _
        Left(Trim(UCase(c.Value)), 2) = "AX" Then
     Else
@@ -52,7 +52,7 @@ Next c
 
 commandsLastCol = ActiveSheet.Cells(Selection.Row, 16384).End(xlToLeft).Column
 If Selection.Address <> Selection.EntireRow.Address Then
-    commandsLastCol = Selection.Columns(Selection.Columns.count).Column
+    commandsLastCol = Selection.Columns(Selection.Columns.Count).Column
 Else
     numberIterations = 10 'default for M if not provided and entire row selected
 End If
@@ -81,10 +81,12 @@ End If
 ' Mxx -> Number of Cells, default 10
 ' ATxx (xx optional) -> All transitions AND width (default same as logic cells
 ' AXxx (xx mandatory) -> All bus transitions AND width
+' E (explicit) -> Retain previous logic value
 
 globalLineWidth = 2 'default for W if not provided
 globalTransitionsCellWidth = 100 'default if no number was provided with command AT
 allTransitionsMode = False
+explicitMode = False
 
 missingM = True
 If Selection.Address <> Selection.EntireRow.Address Then 'Not entire row is selected
@@ -137,6 +139,11 @@ For Each c In commandsRange
             globalTransitionsCellWidth = CInt(checkValue)
         End If
 
+    End If
+    
+    If Left(Trim(UCase(c.Value)), 1) = "E" Then
+        explicitMode = True
+        isGlobalCommand = True
     End If
     
     If isGlobalCommand = True Then
@@ -248,7 +255,9 @@ Select Case True
     Case logicCommands(0).command = "" Or logicCommands(0).command = "0"
         If isBus = False Then
             Call drawBottom(logicCommands(0), globalLineWidth, False)
-            If allTransitionsMode = True Then
+            If explicitMode = True Then
+                nextCommand = "Bottom"
+            ElseIf allTransitionsMode = True Then
                 nextCommand = "TransitionBottomTop"
             Else
                 nextCommand = "Top"
@@ -261,7 +270,9 @@ Select Case True
     Case logicCommands(0).command = "1"
         If isBus = False Then
             Call drawTop(logicCommands(0), globalLineWidth, False)
-            If allTransitionsMode = True Then
+            If explicitMode = True Then
+                nextCommand = "Top"
+            ElseIf allTransitionsMode = True Then
                 nextCommand = "TransitionTopBottom"
             Else
                 nextCommand = "Bottom"
@@ -317,7 +328,9 @@ Debug.Print lastCommandDrawn
                 End If
                 If nextCommand = "Top" Then
                     Call drawTop(logicCommands(i), globalLineWidth, False)
-                    If allTransitionsMode = True Then
+                    If explicitMode = True Then
+                        nextCommand = "Top"
+                    ElseIf allTransitionsMode = True Then
                         nextCommand = "TransitionTopBottom"
                         GoTo ExitSelect
                     Else
@@ -327,7 +340,9 @@ Debug.Print lastCommandDrawn
                 End If
                 If nextCommand = "Bottom" Then
                     Call drawBottom(logicCommands(i), globalLineWidth, False)
-                    If allTransitionsMode = True Then
+                    If explicitMode = True Then
+                        nextCommand = "Bottom"
+                    ElseIf allTransitionsMode = True Then
                         nextCommand = "TransitionBottomTop"
                         GoTo ExitSelect
                     Else
@@ -392,7 +407,9 @@ Debug.Print lastCommandDrawn
         Case logicCommands(i).command = "1"
             If isBus = False Then
                 Call drawTop(logicCommands(i), globalLineWidth, False)
-                If allTransitionsMode = True Then
+                If explicitMode = True Then
+                    nextCommand = "Top"
+                ElseIf allTransitionsMode = True Then
                     nextCommand = "TransitionTopBottom"
                 Else
                     nextCommand = "Bottom"
@@ -402,7 +419,9 @@ Debug.Print lastCommandDrawn
         Case logicCommands(i).command = "0"
             If isBus = False Then
                 Call drawBottom(logicCommands(i), globalLineWidth, False)
-                If allTransitionsMode = True Then
+                If explicitMode = True Then
+                    nextCommand = "Bottom"
+                ElseIf allTransitionsMode = True Then
                     nextCommand = "TransitionBottomTop"
                 Else
                     nextCommand = "Top"
@@ -423,6 +442,18 @@ Debug.Print lastCommandDrawn
             
 ExitSelect:
     End Select
+
+    'Set explicit exceptions
+    If allTransitionsMode = True And explicitMode = True Then
+
+        If logicCommands(i).command = "" And logicCommands(i).commandDrawn = "Top" And logicCommands(i + 1).command = "0" Then
+            Call drawTransitionTopBottom(logicCommands(i), globalLineWidth, False)
+        End If
+        
+        If logicCommands(i).command = "" And logicCommands(i).commandDrawn = "Bottom" And logicCommands(i + 1).command = "1" Then
+            Call drawTransitionBottomTop(logicCommands(i), globalLineWidth, False)
+        End If
+    End If
 
 Next i
 
@@ -787,5 +818,3 @@ Function getXLWeight(weight As Integer)
             getXLWeight = xlThick
     End Select
 End Function
-
-
