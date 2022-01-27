@@ -1,4 +1,3 @@
-' Put this in the ThisWorkbook module in your PERSONAL.XLSB to get these shortcuts
 Option Explicit
 
 Private Sub Workbook_Open()
@@ -33,5 +32,10 @@ Private Sub Workbook_Open()
     Application.OnKey "%{DOWN}", "PERSONAL.XLSB!decr" 'ALT+UpArrow
     Application.OnKey "^%+n", "PERSONAL.XLSB!Num_Eng.Num_Eng" 'CTRL-ALT-SHIFT-N
     Application.OnKey "^%d", "PERSONAL.XLSB!ActiveTableFillInBlanks" 'CTRL-ALT-D
+    Application.OnKey "^%w", "PERSONAL.XLSB!createWave " 'CTRL-ALT-W to create waveform"
+    Application.OnKey "^%+{BackSpace}", "PERSONAL.XLSB!DeleteNotVisibleRowsFromTable " 'CTRL-ALT-SHIFT-BackSpace
+    
+    
 End Sub
+
 
