@@ -34,7 +34,7 @@ Private Sub Workbook_Open()
     Application.OnKey "^%d", "PERSONAL.XLSB!ActiveTableFillInBlanks" 'CTRL-ALT-D
     Application.OnKey "^%w", "PERSONAL.XLSB!createWave " 'CTRL-ALT-W to create waveform"
     Application.OnKey "^%+{BackSpace}", "PERSONAL.XLSB!DeleteNotVisibleRowsFromTable " 'CTRL-ALT-SHIFT-BackSpace
-    
+    Application.OnKey "%+d", "PERSONAL.XLSB!Delete_Active_Row" 'ALT+SHIFT+D    
     
 End Sub
 
