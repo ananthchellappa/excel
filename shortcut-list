@@ -34,6 +34,22 @@ CTRL SHIFT > : Enter row-only highlight mode (Sebastian Bulz)
 CTRL SHIFT < : Exit row-only highlight mode (Sebastian Bulz)
 CTRL J : Center stage - you have a frozen section at the left that you want always visible. Get the columns of the selected cells adjacent to 
            that section by hiding the intervening columns (and vice versa - so this one toggles it). Very handy for analysis of data. Thanks Khurram Mukhtar
+CTRL ALT E : Go to end of block (go down this column to the first cell that differs from current cell)
+CTRL ALT S : Go to start of block (go up this column to the first cell that differs from current cell)
+CTRL ALT H : Filter the table to show the rows where any cell has highlighting that differs from the other cells in the row
+CTRL ALT SHIFT H : Filter the table to show the rows such that cells in this column (of active cell) have highlighting differing from other cells in their row
+CTRL ALT ShIFT S : Launch the save filter form (you have a filter applied to the table and want to save it)
+CTRL ALT SHIFT V : View the saved filters
+CTRL ALT SHIFT F : Apply the default filter from the saved filter list
+CTRL ] : Increase font in current cell
+CTRL [ : Decrease font in current cell
+ALT UpArrow : Increment (date or number in current cell)
+ALT DnArrow : Decrement (data or number in current cell)
+CTRL ALT SHIFT N : Toggle format of numeric cells in the selection : if engineering format (Eg. 100k) change to regular (100000), and vice versa
+CTRL ALT D : Fill in the blanks if you have (in a column, A,,,B,,F,,,,,C,, then you get A,A,A,B,B,F,F,F,F,F,C,C
+CTRL ALT W : Create digital timing diagram using cell borders (Thank you Daniel Jazbec)
+CTRL ALT SHIFT BkSpc : Delete the hidden rows from the table (with confirmation pop-up)
+ALT SHIFT D : Delete row of active cell
 
 Accomplished by this code in the PERSONAL.XLSB's "ThisWorkbook" (access with ALT-F11)
 Private Sub Workbook_Open()
