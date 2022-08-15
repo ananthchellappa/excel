@@ -35,6 +35,10 @@ Private Sub Workbook_Open()
     Application.OnKey "^%w", "PERSONAL.XLSB!createWave " 'CTRL-ALT-W to create waveform"
     Application.OnKey "^%+{BackSpace}", "PERSONAL.XLSB!DeleteNotVisibleRowsFromTable " 'CTRL-ALT-SHIFT-BackSpace
     Application.OnKey "^+%d", "PERSONAL.XLSB!Delete_Active_Row" 'ALT+SHIFT+D    
+    Application.OnKey "+%f", "PERSONAL.XLSB!Filter_Include" 'ALT+SHIFT+F
+    Application.OnKey "+%t", "PERSONAL.XLSB!Filter_Include_CaseSensitive" 'ALT+SHIFT+T
+    Application.OnKey "+%e", "PERSONAL.XLSB!Filter_Exclude" 'ALT+SHIFT+E
+    Application.OnKey "+%r", "PERSONAL.XLSB!Filter_Exclude_CaseSensitive" 'ALT+SHIFT+R
     
 End Sub
 
