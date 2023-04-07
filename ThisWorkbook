@@ -40,6 +40,8 @@ Private Sub Workbook_Open()
     Application.OnKey "+%e", "PERSONAL.XLSB!Filter_Exclude" 'ALT+SHIFT+E
     Application.OnKey "+%r", "PERSONAL.XLSB!Filter_Exclude_CaseSensitive" 'ALT+SHIFT+R
     
+    Application.CommandBars("Research").Enabled = False ' so that CTRL ALT LeftClick doesn't launch Research pane
+    
 End Sub
 
 
