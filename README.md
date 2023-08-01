@@ -1,7 +1,7 @@
 # Excel Productivity Pack - Welcome!
 Personal macro workbook and other helpful stuff
 
-Please check out the YouTube video on how to use this https://youtu.be/TLteaxtuxoo
+Please check out the YouTube video on how to use this https://youtu.be/TIsNlnCGF_Y
 
 What the Personal Macro Workbook is and why you should care :
 
