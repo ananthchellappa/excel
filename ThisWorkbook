@@ -19,8 +19,8 @@ Private Sub Workbook_Open()
     Application.OnKey "^j", "PERSONAL.XLSB!CenterStage.CenterStage"      'CTRL-J
     Application.OnKey "^%e", "PERSONAL.XLSB!Go_To_Block_End"    'CTRL-ALT-E
     Application.OnKey "^%s", "PERSONAL.XLSB!Go_To_Block_Start"    'CTRL-ALT-S
-    Application.OnKey "^t", "PERSONAL.XLSB!CopyRow"    'CTRL-T
-    Application.OnKey "^+t", "PERSONAL.XLSB!CopyToTop"    'CTRL-SHIFT-T
+    Application.OnKey "^t", "PERSONAL.XLSB!Copy2Above_Vin"    'CTRL-T  from CopyRow
+    Application.OnKey "^+t", "PERSONAL.XLSB!Copy2Top_Vin"    'CTRL-SHIFT-T from Copy2Top
     Application.OnKey "^%h", "PERSONAL.XLSB!FilterOdd"    'CTRL-ALT-H
     Application.OnKey "^%+h", "PERSONAL.XLSB!FilterOddSelectedColumn"    'CTRL-ALT-SHIFT-H
     Application.OnKey "^%+s", "PERSONAL.XLSB!Save_Filter_Form_Start" 'CTRL-ALT-SHIFT-S
@@ -34,13 +34,14 @@ Private Sub Workbook_Open()
     Application.OnKey "^%d", "PERSONAL.XLSB!ActiveTableFillInBlanks" 'CTRL-ALT-D
     Application.OnKey "^%w", "PERSONAL.XLSB!createWave " 'CTRL-ALT-W to create waveform"
     Application.OnKey "^%+{BackSpace}", "PERSONAL.XLSB!DeleteNotVisibleRowsFromTable " 'CTRL-ALT-SHIFT-BackSpace
-    Application.OnKey "^+%d", "PERSONAL.XLSB!Delete_Active_Row" 'ALT+SHIFT+D    
+    Application.OnKey "+%d", "PERSONAL.XLSB!Delete_Active_Row" 'ALT+SHIFT+D
     Application.OnKey "+%f", "PERSONAL.XLSB!Filter_Include" 'ALT+SHIFT+F
     Application.OnKey "+%t", "PERSONAL.XLSB!Filter_Include_CaseSensitive" 'ALT+SHIFT+T
     Application.OnKey "+%e", "PERSONAL.XLSB!Filter_Exclude" 'ALT+SHIFT+E
     Application.OnKey "+%r", "PERSONAL.XLSB!Filter_Exclude_CaseSensitive" 'ALT+SHIFT+R
+    Application.OnKey "^%l", "PERSONAL.XLSB!forSelection" 'CTRL+ALT+L - make cells that are refs into links
     
-    Application.CommandBars("Research").Enabled = False ' so that CTRL ALT LeftClick doesn't launch Research pane
+    Application.CommandBars("Research").Enabled = False
     
 End Sub
 
