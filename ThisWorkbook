@@ -40,6 +40,7 @@ Private Sub Workbook_Open()
     Application.OnKey "+%e", "PERSONAL.XLSB!Filter_Exclude" 'ALT+SHIFT+E
     Application.OnKey "+%r", "PERSONAL.XLSB!Filter_Exclude_CaseSensitive" 'ALT+SHIFT+R
     Application.OnKey "^%l", "PERSONAL.XLSB!forSelection" 'CTRL+ALT+L - make cells that are refs into links
+    Application.OnKey "^\", "PERSONAL.XLSB!ClearFormats" 'CTRL backslash
     
     Application.CommandBars("Research").Enabled = False
     
